@@ -17,17 +17,21 @@ struct ContentView: View {
     @State var gameOutcome = ""
     @State var win = 0
     @State var round = 0
-    @State var showAlert = false
     @State var showComputerChoice = false
+    @State var backgroundColor: Color = .white
     var body: some View {
         GeometryReader{geometry in
             VStack {
                 VStack {
                     // Computer Choices
                     if !showComputerChoice {
+                        Text("Opponent Option")
+                            .font(.system(size: 20))
                         Text("🤖")
                             .font(.system(size: 100))
                     } else {
+                        Text("Opponent Option")
+                            .font(.system(size: 20))
                         Text(computerChoice.rawValue)
                             .font(.system(size: 100))
                     }
@@ -60,46 +64,59 @@ struct ContentView: View {
                         Text("Round: \(round)")
                         Spacer()
                     }
+                    Text("You \(gameOutcome)!")
+                        .font(.title)
+                        .padding()
+                        .foregroundColor(.white)
                 } .frame(width: geometry.size.width, height: geometry.size.height/2)
-            } .alert("You \(gameOutcome)!", isPresented: $showAlert){
-                Button("Play again!", role: .cancel){showComputerChoice = false}
             }
         }
+        .background(backgroundColor.edgesIgnoringSafeArea(.all))
+        
     }
-    func checkWinner(playerChoice:Choices){
-        switch playerChoice {
-        case .Scissors:
-            if computerChoice == .Scissors{
-                gameOutcome = "Draw"
-            } else if computerChoice == .Paper{
-                gameOutcome = "Win"
-                win += 1
-            } else {
-                gameOutcome = "Lose"
-            }
-        case .Paper:
-            if computerChoice == .Scissors{
-                gameOutcome = "Lose"
-            } else if computerChoice == .Paper{
-                gameOutcome = "Draw"
-            } else {
-                gameOutcome = "Win"
-                win += 1
-            }
-        case .Rock:
-            if computerChoice == .Scissors{
-                gameOutcome = "Win"
-                win += 1
-            } else if computerChoice == .Paper{
-                gameOutcome = "Lose"
-            } else {
-                gameOutcome = "Draw"
+    func checkWinner(playerChoice: Choices) {
+        withAnimation {
+            switch playerChoice {
+            case .Scissors:
+                if computerChoice == .Scissors {
+                    gameOutcome = "Draw"
+                    backgroundColor = .mint
+                } else if computerChoice == .Paper {
+                    gameOutcome = "Win"
+                    win += 1
+                    backgroundColor = .green
+                } else {
+                    gameOutcome = "Lose"
+                    backgroundColor = .red
+                }
+            case .Paper:
+                if computerChoice == .Scissors {
+                    gameOutcome = "Lose"
+                    backgroundColor = .red
+                } else if computerChoice == .Paper {
+                    gameOutcome = "Draw"
+                    backgroundColor = .mint
+                } else {
+                    gameOutcome = "Win"
+                    win += 1
+                    backgroundColor = .green
+                }
+            case .Rock:
+                if computerChoice == .Scissors {
+                    gameOutcome = "Win"
+                    win += 1
+                    backgroundColor = .green
+                } else if computerChoice == .Paper {
+                    gameOutcome = "Lose"
+                    backgroundColor = .red
+                } else {
+                    gameOutcome = "Draw"
+                    backgroundColor = .mint
+                }
             }
         }
-        showAlert = true
     }
 }
-
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
