@@ -1,6 +1,6 @@
 //
 //  ContentView.swift
-//  RPS
+//  Rock Paper Scissors
 //
 //  Created by Paapa Kusi on 5/5/24.
 //
